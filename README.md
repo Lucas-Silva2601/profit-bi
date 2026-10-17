@@ -56,7 +56,7 @@ flowchart LR
     end
 
     subgraph DATA
-        F[((PostgreSQL))]
+        F[(PostgreSQL)]
         G[Drizzle ORM<br/>9 tabelas]
     end
 
@@ -113,7 +113,8 @@ flowchart LR
 ### Pré-requisitos
 
 - Node.js 20+
-- Um banco PostgreSQL (recomendado: [Neon](https://neon.tech) — free tier)
+- PostgreSQL — local via Docker (recomendado em dev) ou na nuvem ([Neon](https://neon.tech) — free tier)
+- Docker Desktop (opcional, apenas para o banco local)
 
 ### Instalação
 
@@ -127,15 +128,33 @@ npm install
 
 # 3. Configure o ambiente
 cp .env.example .env.local
-#    Preencha DATABASE_URL (do painel do Neon) e gere o segredo do auth:
+#    Gere o segredo do auth:
 openssl rand -base64 32   # cole o resultado no BETTER_AUTH_SECRET
 
-# 4. Aplique as migrations
+# 4. Suba o banco local e aplique as migrations
+npm run db:up      # PostgreSQL 16 via Docker (pule se for usar Neon)
 npm run db:migrate
 
 # 5. Suba o desenvolvimento
 npm run dev
 ```
+
+### Banco de dados
+
+**Opção A — PostgreSQL local com Docker (recomendado para desenvolvimento)**
+
+```bash
+npm run db:up      # sobe o container postgres:16 na porta 5432
+npm run db:migrate # cria as tabelas
+```
+
+O `.env.local` deve apontar para `postgresql://profitbi:profitbi@localhost:5432/profitbi`. Para derrubar o banco: `npm run db:down`.
+
+**Opção B — Neon / PostgreSQL externo**
+
+Crie o banco no [Neon](https://neon.tech), copie a connection string para `DATABASE_URL` no `.env.local` e rode `npm run db:migrate`.
+
+> ⚠️ Sem `.env.local` a aplicação não inicia: `DATABASE_URL` e `BETTER_AUTH_SECRET` são obrigatórios (validação Zod em `env.ts`).
 
 Acesse [http://localhost:3000](http://localhost:3000), crie sua conta e arraste sua primeira planilha.
 
@@ -158,6 +177,7 @@ Acesse [http://localhost:3000](http://localhost:3000), crie sua conta e arraste 
 | `npm run app:stop` / `app:restart` | Para ou reinicia a aplicação |
 | `npm run build` / `start` | Build e produção |
 | `npm run lint` | Lint com ESLint |
+| `npm run db:up` / `db:down` | Sobe/derruba o PostgreSQL local (Docker) |
 | `npm run db:generate` | Gera migration a partir do schema |
 | `npm run db:migrate` | Aplica migrations pendentes |
 | `npm run db:push` | Sincroniza schema direto (dev) |

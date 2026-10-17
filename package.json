@@ -10,6 +10,8 @@
     "app:start": "node scripts/start.mjs",
     "app:stop": "node scripts/stop.mjs",
     "app:restart": "node scripts/restart.mjs",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
