@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="assets/logo/logo.png" alt="Profit BI" width="96" />
-
 # Profit BI
 
 **Plataforma de Business Intelligence multi-tenant com dashboards gerados automaticamente por Inteligência Artificial.**
